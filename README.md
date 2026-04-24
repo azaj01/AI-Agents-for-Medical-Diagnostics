@@ -1,26 +1,29 @@
 # Octochains
 
-[![GOSIM Spotlight 2026](https://img.shields.io/badge/GOSIM_2026-Top_10_Featured_Project-blueviolet)](https://gosim.org)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Version](https://img.shields.io/badge/version-0.1.0-blue)](https://pypi.org/project/octochains/)
+[![GOSIM Spotlight 2026](https://img.shields.io/badge/GOSIM_2026-Top_10_Featured_Project-blueviolet)](https://gosim.org) 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) 
+[![Version](https://img.shields.io/badge/version-0.1.0-blue)](https://pypi.org/project/octochains/) 
+<img align="right" width="250" alt="Octochains Logo" src="https://github.com/user-attachments/assets/93aecdbf-10af-4f32-9cf3-18a0547d494a" />
 
-<img align="right" width="280" alt="Octochains Logo" src="https://github.com/user-attachments/assets/7a111c1a-9473-4c83-b182-13b2f98efd7c" />
+<br>
 
 **Octochains** is a lightweight, zero-dependency Python framework for **Collaborative AI Reasoning**. It moves away from "monolithic" AI responses toward a parallel, multi-expert architecture that eliminates **"Expert Blindspots"** in high-stakes decision-making.
 
-By broadcasting a single complex problem to a pool of isolated specialists, Octochains ensures that every angle, from clinical diagnostics to legal compliance—is evaluated independently before reaching a final consensus.
+By broadcasting a single complex problem to a pool of isolated specialists, Octochains ensures that every angle, from clinical diagnostics to legal compliance, is evaluated independently before reaching a final consensus.
+
+<br>
 
 ---
 
 ### The Core Innovation
-
-<img width="1427" height="612" alt="agentic ai for medica diagnostics" src="https://github.com/user-attachments/assets/c835c6aa-fbd1-42d4-887f-42c4c64071ea" />
 
 Even State-of-the-Art models (like GPT-5) can fall into "Reasoning Traps", a form of cognitive tunnel vision where the model commits to a path too early. Octochains eliminates this via a MapReduce-inspired architecture:
 
 1.  **Broadcasting**: The full, complex problem is passed directly to every specialized agent in the pool.
 2.  **Parallel Execution**: Agents operate simultaneously in isolated, threaded environments, ensuring they cannot bias each other's initial findings.
 3.  **The Aggregator**: A final "Chief Justice" agent synthesizes these conflicting or supporting insights into a single transparent, explainable, and robust outcome.
+
+<img width="1690" height="931" alt="f" src="https://github.com/user-attachments/assets/b0211d7d-09dc-4a2b-a993-6487ae6475a3" />
 
 ---
 
@@ -99,6 +102,9 @@ print(f"Audit Trail: {report.traces}")
 ```
 ---
 ### Featured Use Case: Medical Diagnostics
+
+<img width="600" align="center-horizontal" height="300" alt="agentic ai for medica diagnostics" src="https://github.com/user-attachments/assets/c835c6aa-fbd1-42d4-887f-42c4c64071ea" />
+<br>
 
 While Octochains is a universal framework, its power is best demonstrated in multidisciplinary medicine. The featured example simulates a clinical team to rule out underlying heart conditions, psychological factors, or respiratory issues that might be missed by a single-model analysis.
 
