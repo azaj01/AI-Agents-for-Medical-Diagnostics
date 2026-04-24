@@ -1,106 +1,161 @@
-# AI-Agents-for-Medical-Diagnostics
+# Octochains
+<!-- <img align="right" width="250" alt="Octochains Logo" > -->
+[![GOSIM Spotlight 2026](https://img.shields.io/badge/GOSIM_2026-Top_10_Featured_Project-blueviolet)](https://gosim.org)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Version](https://img.shields.io/badge/version-0.1.0-blue)](https://pypi.org/project/octochains/)
 
-<img width="900" alt="image" src="https://github.com/user-attachments/assets/b7c87bf6-dfff-42fe-b8d1-9be9e6c7ce86">
-
-## Collaborative AI Reasoning (Core Idea)
-
-This project is a **demo of a collaborative AI reasoning architecture**, where multiple AI agents work together to analyze complex problems from different perspectives.
-
-Instead of relying on a single model to generate answers, this approach decomposes reasoning into **specialized agents** that operate **in parallel**, each contributing structured insights. These insights are then aggregated into a final, explainable outcome.
-
-The goal is to move beyond single-model responses toward **coordinated, multi-perspective AI systems** that are more transparent, robust, and scalable.
-
-👉 **Medical diagnostics in this repository is one concrete use case of this broader architecture.**
+**Octochains** is a lightweight, zero-dependency Python framework for **Collaborative AI Reasoning**. It moves away from "monolithic" AI responses toward a parallel, multi-expert architecture that eliminates "Expert Blindspots" in high-stakes decision-making.
 
 ---
 
-## 🏥 AI Agents for Medical Diagnostics (Use Case)
+### The Core Innovation
 
-A Python project that creates specialized **LLM-based AI agents** to analyze complex medical cases.  
-The system integrates insights from different medical specialists to provide comprehensive assessments  
-and suggested treatment directions, demonstrating the potential of AI in multidisciplinary reasoning.
+Even State-of-the-Art models (like GPT-5) can fall into "Reasoning Traps", a form of cognitive tunnel vision where the model commits to a path too early. Octochains eliminates this via a MapReduce-inspired architecture:
 
-⚠️ **Disclaimer**: This project is for research and educational purposes only.  
-It is **not intended for clinical use**.
-
----
-
-## ✨ What’s New (Latest Update)
-
-- Added **MIT License**  
-- Fixed bugs and updated `requirements.txt`  
-- Added `.gitignore`  
-- Upgraded core LLM to **GPT-5**  
+1.  **Broadcasting**: The full, complex problem is passed directly to every specialized agent in the pool.
+2.  **Parallel Execution**: Agents operate simultaneously in isolated, threaded environments, ensuring they cannot bias each other's initial findings.
+3.  **The Aggregator**: A final "Chief Justice" agent synthesizes these conflicting or supporting insights into a single transparent, explainable, and robust outcome.
 
 ---
 
-## 🚀 How It Works
+### Quickstart
 
-In the current version, we use **three AI agents (GPT-5)**, each specializing in a different aspect of medical analysis.  
-A medical report is passed to all agents, which run **in parallel (threading)** and return their findings.  
-The outputs are then combined and summarized into **three possible health issues** with reasoning.
+Octochains is designed to be developer-first and model-agnostic.
 
-### AI Agents
+### 1. Install
+```bash
+pip install octochains
+```
 
-**1. Cardiologist Agent**  
-- *Focus*: Detect cardiac issues such as arrhythmias or structural abnormalities.  
-- *Recommendations*: Cardiovascular testing, monitoring, and management strategies.  
+### 2. Define an Agent
+```python
+from octochains import Agent, tool
 
-**2. Psychologist Agent**  
-- *Focus*: Identify psychological conditions (e.g., panic disorder, anxiety).  
-- *Recommendations*: Therapy, stress management, or medication adjustments.  
+class Specialist(Agent):
+    def __init__(self):
+        super().__init__(
+            role="Legal Expert", 
+            goal="Identify liability risks"
+        )
 
-**3. Pulmonologist Agent**  
-- *Focus*: Assess respiratory causes for symptoms (e.g., asthma, breathing disorders).  
-- *Recommendations*: Lung function tests, breathing exercises, respiratory treatments.  
+    @tool
+    def check_compliance(self, text: str):
+        """Analyzes text for regulatory non-compliance."""
+        # Framework automatically generates JSON schema for this tool
+        return "Compliant"
+
+    def execute(self, data: str) -> str:
+        # Use any LLM here (OpenAI, Gemini, Ollama, etc.)
+        # The 'data' passed here is the full complex problem.
+        return f"Legal Analysis: {data}"
+```
+### 3. Define an Aggregator
+```python
+from octochains import Aggregator
+
+class ChiefConsensusOfficer(Aggregator):
+    def __init__(self):
+        super().__init__(
+            role="Chief Aggregator",
+            goal="Synthesize expert opinions into a final verdict"
+        )
+
+    def synthesize(self, problem_data: str, agent_reports: dict[str, str]) -> str:
+        """
+        Receives the original problem and a dictionary of reports.
+        Key: Agent Role, Value: Agent output string.
+        """
+        # Here you can call a high-reasoning LLM to compare the reports
+        # or implement custom logic to resolve conflicts.
+        verdict = "APPROVED"
+        for role, report in agent_reports.items():
+            if "RISK" in report.upper():
+                verdict = "REJECTED"
+        
+        return f"Final Decision: {verdict} based on {len(agent_reports)} expert inputs."
+```
+
+### 4. Run the Parallel Engine
+```python
+from octochains import Engine
+
+# Initialize your experts and the aggregator
+engine = Engine(
+    agents=[legal_expert, finance_expert, tech_expert], 
+    aggregator=ChiefConsensusOfficer()
+)
+
+# Broadcast the complex problem to all agents at once
+report = engine.run("Full Project Alpha Investment Case File...")
+
+print(f"Consensus: {report.consensus}")
+print(f"Audit Trail: {report.traces}")
+```
+---
+### Featured Use Case: Medical Diagnostics
+
+While Octochains is a universal framework, its power is best demonstrated in multidisciplinary medicine. The featured example simulates a clinical team to rule out underlying heart conditions, psychological factors, or respiratory issues that might be missed by a single-model analysis.
+
+- **Cardiologist Agent**: Focuses on arrhythmias and structural abnormalities.
+- **Psychologist Agent**: Identifies conditions like anxiety or panic disorders.
+- **Pulmonologist Agent**: Assesses respiratory causes such as asthma or COPD.
+
+⚠️ **Disclaimer**: This project is for research and educational purposes only and is **not intended for clinical use**.
 
 ---
 
-## 📂 Repository Structure
+### Repository Structure 
 
-- `Medical Reports/` → Synthetic medical report samples  
-- `Results/` → Outputs generated by the agents  
+**The Agent & Aggregator Hub**
+Octochains is built to be modular. We are developing an Agent & Aggregator Hub where the community can contribute, publish, and reuse specialized reasoning modules.
+```plaintext
+src/octochains/
+├── __init__.py           <-- Core framework exports
+├── base.py               <-- Abstract Base Classes (Agent/Aggregator)
+├── engine.py             <-- Parallel Broadcast Engine
+├── schema.py    
+├── exceptions.py         <-- Error handling     
+│
+├── agents/               <-- THE AGENT HUB
+│   ├── medical/          
+│   │   ├── __init__.py   <-- Export: Cardiologist, Neurologist, etc.
+│   │   ├── cardiology.py
+│   │   └── neurology.py
+│   ├── legal/
+│   │   ├── __init__.py   <-- Export: Compliance, ContractExpert
+│   │   └── compliance.py
+│   └── finance/
+│       ├── __init__.py
+│       └── analyst.py
+│
+└── aggregators/          <-- THE AGGREGATOR LIBRARY
+    ├── medical/
+    │   ├── __init__.py   <-- Export: ChiefMedicalOfficer
+    │   └── cmo.py
+    └── logic/            <-- Standard decision-making logic
+        ├── __init__.py   <-- Export: MajorityVote, WeightedConsensus
+        ├── majority.py
+        └── consensus.py
+```
+**Demo Examples**
+Every demo in Octochains is designed as a standalone, reproducible case study. This ensures the core framework remains lightweight while allowing specific use cases to have their own environment.
+```plaintext
+demo-examples/
+└── 01-ai-agents-for-medical-diagnostics/
+    ├── medical_reports/    <-- Sample patient dossiers
+    ├── results/            <-- Historical audit logs of agent outputs
+    ├── requirements.txt    <-- Isolated dependencies (e.g., biopython)
+    └── run_demo.py         <-- Entry point for the diagnostic engine
+```
 
 ---
 
-## ⚡ Quickstart
+### Future Roadmap
+We are expanding Octochains from a library into a comprehensive ecosystem for high-stakes AI reasoning.
 
-1. **Clone the repo:**
-   ```bash
-   git clone https://github.com/ahmadvh/AI-Agents-for-Medical-Diagnostics.git
-   cd AI-Agents-for-Medical-Diagnostics
-   ```
-2. **Create a virtual environment and install dependencies:**
-    ```bash
-    python -m venv venv
-    source venv/bin/activate  # On Windows: venv\Scripts\activate
-    pip install -r requirements.txt
-    ```
-3. **Set up your API credentials:**
-    - Create a file named apikey.env in the project root.
-    - Add your OpenAI (or other LLM provider) credentials:
-    ```bash
-    OPENAI_API_KEY=your_api_key_here
-    ```
-4. **Run the system:** `python main.py`
+- **The Agent Hub:** A community-driven marketplace for pre-tuned specialist modules. Developers can build and publish their own "experts" (e.g., M&A Due Diligence, Cybersecurity Threat Hunter, or Endocrinology Specialist) for others to snap into their own chains.
+
 ---
-
-## 🔮 Future Enhancements
-
-Planned improvements for upcoming versions include:
-
-- **Specialist Expansion**: Add new agents for Neurology, Endocrinology, Immunology, and other fields.  
-- **Local LLM Support**: Integrate models such as **Llama 4** via Ollama, vLLM, or llama.cpp, with function-calling style hooks and safe code execution.  
-- **Vision Capabilities**: Enable multimodal decision-making with agents that analyze **radiology images** and other medical scans.  
-- **Live Data Tools**: Incorporate LLM-based tools for **real-time search** and querying structured **medical datasets**.  
-- **Advanced Parsing**: Improve handling of complex medical reports with structured outputs (e.g., JSON schema validation).  
-- **Automated Testing**: Add evaluation pipelines and smoke-test CI with mocked LLM calls for reproducibility.  
----
-
-## 📜 License
-
-This repository is licensed under the **MIT License**.  
-
-You are free to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the software, subject to the conditions described in the [LICENSE](LICENSE) file.  
-
-The software is provided **“as is”**, without warranty of any kind.
+### License & Contact
+Octochains is open-source under the MIT license. For enterprise features and custom integrations
+contact: ahmad.vh7@gmail.com
