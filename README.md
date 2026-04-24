@@ -4,7 +4,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Version](https://img.shields.io/badge/version-0.1.0-blue)](https://pypi.org/project/octochains/)
 
-<img src="https://github.com/user-attachments/assets/e45eb716-8910-438a-a595-1f96e2085ff2" align="right" width="280" alt="Octochains Logo" />
+<img align="right" width="280" alt="Octochains Logo" src="https://github.com/user-attachments/assets/7a111c1a-9473-4c83-b182-13b2f98efd7c" />
 
 **Octochains** is a lightweight, zero-dependency Python framework for **Collaborative AI Reasoning**. It moves away from "monolithic" AI responses toward a parallel, multi-expert architecture that eliminates **"Expert Blindspots"** in high-stakes decision-making.
 
@@ -13,6 +13,8 @@ By broadcasting a single complex problem to a pool of isolated specialists, Octo
 ---
 
 ### The Core Innovation
+
+<img width="1427" height="612" alt="agentic ai for medica diagnostics" src="https://github.com/user-attachments/assets/c835c6aa-fbd1-42d4-887f-42c4c64071ea" />
 
 Even State-of-the-Art models (like GPT-5) can fall into "Reasoning Traps", a form of cognitive tunnel vision where the model commits to a path too early. Octochains eliminates this via a MapReduce-inspired architecture:
 
