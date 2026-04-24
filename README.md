@@ -4,8 +4,11 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Version](https://img.shields.io/badge/version-0.1.0-blue)](https://pypi.org/project/octochains/)
 
-**Octochains** is a lightweight, zero-dependency Python framework for **Collaborative AI Reasoning**. It moves away from "monolithic" AI responses toward a parallel, multi-expert architecture that eliminates "Expert Blindspots" in high-stakes decision-making.
-<img width="250" align="right" height="250" alt="octochains" src="https://github.com/user-attachments/assets/e45eb716-8910-438a-a595-1f96e2085ff2" />
+<img src="https://github.com/user-attachments/assets/e45eb716-8910-438a-a595-1f96e2085ff2" align="right" width="280" alt="Octochains Logo" />
+
+**Octochains** is a lightweight, zero-dependency Python framework for **Collaborative AI Reasoning**. It moves away from "monolithic" AI responses toward a parallel, multi-expert architecture that eliminates **"Expert Blindspots"** in high-stakes decision-making.
+
+By broadcasting a single complex problem to a pool of isolated specialists, Octochains ensures that every angle—from clinical diagnostics to legal compliance—is evaluated independently before reaching a final consensus.
 
 ---
 
