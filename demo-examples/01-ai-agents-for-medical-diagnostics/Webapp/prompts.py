@@ -40,8 +40,9 @@ Patient's Report: {medical_report}
 
 AGGREGATOR_PROMPT = """
 Act like a multidisciplinary team lead.
-Review these specialist reports and synthesize them into 3 bulleted possible health issues with reasons.
+Review these specialist reports and synthesize them into 2 bulleted possible health issues with reasons. based on the specialists reports.
 
+SPECIALIST REPORTS:
 Cardiologist: {cardio}
 Psychologist: {psych}
 Pulmonologist: {pulmo}

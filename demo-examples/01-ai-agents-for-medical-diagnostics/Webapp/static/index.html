@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    
+    <div id="tooltip" class="tooltip"></div>
     <div class="header">
         <div class="tagline">AI Agents for Medical Diagnostics</div>
         <div class="reset-hint">Press <span>ESC</span> to Reset</div>
@@ -28,7 +28,7 @@
                 <div class="node agent" id="n-neuro">🧠 Neurologist <div class="loader"></div></div>
                 <div class="node" id="n-llm">⚙️ Multidisciplinary Team <div class="loader"></div></div>
                 
-                <div class="node" id="n-final">✅ Medical<br>Diagnosis</div>
+                <div class="node" id="n-final">Medical<br>Diagnosis</div>
 
                <svg>
                 <path id="p1-cardio" d="M 140 260 C 210 250, 220 100, 280 100" />
@@ -48,10 +48,10 @@
                 <circle r="5" class="dot phase1"><animateMotion begin="indefinite" dur="2s" repeatCount="1"><mpath href="#p1-pulmo"/></animateMotion></circle>
                 <circle r="5" class="dot phase1"><animateMotion begin="indefinite" dur="2s" repeatCount="1"><mpath href="#p1-neuro"/></animateMotion></circle>
 
-                <circle r="5" class="dot phase2"><animateMotion begin="indefinite" dur="1s" repeatCount="1"><mpath href="#p2-cardio"/></animateMotion></circle>
-                <circle r="5" class="dot phase2"><animateMotion begin="indefinite" dur="1s" repeatCount="1"><mpath href="#p2-psych"/></animateMotion></circle>
-                <circle r="5" class="dot phase2"><animateMotion begin="indefinite" dur="1s" repeatCount="1"><mpath href="#p2-pulmo"/></animateMotion></circle>
-                <circle r="5" class="dot phase2"><animateMotion begin="indefinite" dur="1s" repeatCount="1"><mpath href="#p2-neuro"/></animateMotion></circle>
+                <circle r="5" class="dot phase2"><animateMotion begin="indefinite" dur="2s" repeatCount="1"><mpath href="#p2-cardio"/></animateMotion></circle>
+                <circle r="5" class="dot phase2"><animateMotion begin="indefinite" dur="2s" repeatCount="1"><mpath href="#p2-psych"/></animateMotion></circle>
+                <circle r="5" class="dot phase2"><animateMotion begin="indefinite" dur="2s" repeatCount="1"><mpath href="#p2-pulmo"/></animateMotion></circle>
+                <circle r="5" class="dot phase2"><animateMotion begin="indefinite" dur="2s" repeatCount="1"><mpath href="#p2-neuro"/></animateMotion></circle>
             </svg>
             </div>
         </div>

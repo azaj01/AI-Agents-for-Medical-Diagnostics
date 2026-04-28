@@ -1,11 +1,16 @@
 import os
 import uuid
+import json
+import asyncio
+from fastapi.responses import StreamingResponse
 from fastapi import FastAPI, UploadFile, File, Form
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import JSONResponse
 from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
 from octochains import Agent, Aggregator, Engine
+
+
 
 # Import our new prompts file
 import prompts
@@ -66,20 +71,46 @@ class MultidisciplinaryTeam(Aggregator):
 async def analyze_report(file: UploadFile = File(...)):
     content = await file.read()
     patient_data = content.decode("utf-8")
-
-    agents = [Cardiologist(), Psychologist(), Pulmonologist(), Neurologist()]
-    aggregator = MultidisciplinaryTeam()
-    engine = Engine(agents=agents, aggregator=aggregator)
-    
-    report = engine.run(problem_data=patient_data)
     
     session_id = str(uuid.uuid4())
-    traces_text = "\n\n".join([f"--- {getattr(t, 'agent_role', 'Agent')} ---\n{getattr(t, 'output', str(t))}" for t in report.traces])
-    
-    session_store[session_id] = {
-        "original_data": patient_data, "traces": traces_text, "consensus": report.consensus
-    }
-    return {"session_id": session_id, "consensus": report.consensus, "traces": traces_text}
+
+    async def generate_stream():
+        agents = [Cardiologist(), Psychologist(), Pulmonologist(), Neurologist()]
+        
+        # Helper to run synchronous LLM calls in a background thread
+        async def run_agent(agent):
+            loop = asyncio.get_event_loop()
+            result = await loop.run_in_executor(None, agent.execute, patient_data)
+            return agent.role, result
+
+        # Start all agents concurrently
+        tasks = [asyncio.create_task(run_agent(a)) for a in agents]
+        agent_reports = {}
+        
+        # Yield results AS THEY FINISH
+        for coro in asyncio.as_completed(tasks):
+            role, res = await coro
+            agent_reports[role] = res
+            # Stream the individual completion to the frontend
+            yield json.dumps({"type": "agent_done", "role": role, "result": res}) + "\n"
+        
+        # Once all agents are done, run the aggregator
+        aggregator = MultidisciplinaryTeam()
+        loop = asyncio.get_event_loop()
+        consensus = await loop.run_in_executor(None, aggregator.synthesize, patient_data, agent_reports)
+        
+        # Save session context
+        traces_text = "\n\n".join([f"--- {role} ---\n{res}" for role, res in agent_reports.items()])
+        session_store[session_id] = {
+            "original_data": patient_data, "traces": traces_text, "consensus": consensus
+        }
+        
+        # Stream the final result
+        yield json.dumps({"type": "consensus", "session_id": session_id, "consensus": consensus}) + "\n"
+
+    # Return as a stream
+    return StreamingResponse(generate_stream(), media_type="application/x-ndjson")
+
 
 @app.post("/chat")
 async def chat_with_team(session_id: str = Form(...), message: str = Form(...)):
